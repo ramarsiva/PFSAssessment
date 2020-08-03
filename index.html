@@ -1,0 +1,148 @@
+<html lang="en" class=""><head>
+<meta charset="UTF-8">
+<title>PFSWeb Assessment</title>
+<link rel="shortcut icon" type="image/x-icon" href="https://www.pfscommerce.com/wp-content/uploads/2016/09/PFS-Favicon-32x32.png?x80089">
+<style type="text/css">
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #eee;
+  color: #333;
+  font-family: Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 6px;
+  -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.2));
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+.card__wrapper {
+  display: -webkit-box;
+  display: flex;
+  margin: 0 auto;
+  max-width: 1024px;
+  flex-wrap: wrap;
+}
+.card:nth-child(odd) {
+  background-color: #fbdcdc;
+}
+.card:nth-child(even) {
+  background-color: #e0efdf;
+}
+.card__email {
+  font-size: 11px;
+  font-weight: bold;
+  word-wrap: break-word;
+}
+.card__address {
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 0.5;
+}
+.card__image {
+  border-radius: 50%;
+}
+.card__title {
+  font-size: 28px;
+  font-weight: bold;
+}
+.card__cta {
+  background-color: #e26d00;
+  color: #fff;
+  width: 80%;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  padding: 10px;
+  margin: 20px auto;
+}
+
+@media screen and (min-width: 450px) {
+  .card {
+    width: 41%;
+    margin: 4%;
+  }
+}
+@media screen and (min-width: 700px) {
+  .card {
+    width: 29%;
+    margin: 2%;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .card {
+    width: 21%;
+  }
+}
+</style></head>
+<body>
+<section>
+  <main class="card__wrapper"></main>
+</section>
+
+<script>
+function render() {
+  const config = {
+    url: "https://api.randomuser.me",
+    numberCards: 100 };
+
+
+  // Call API to get data
+  fetch(`${config.url}?&results=${config.numberCards}`).
+  then(response => {
+    if (!response.ok) {
+      throw Error("ERROR");
+    }
+    return response.json();
+  }).
+  then(data => {
+    // Output API response to console to view.
+    console.log(data.results);
+    const html = data.results.
+    map(user => {
+      return `
+      <div class="card">
+        <img class="card__image" src="${user.picture.large}" alt="${user.name.first} ${user.name.last}" />
+        <p class="card__title">${user.name.first} ${user.name.last}</p>
+        <p class="card__email">${user.email}</p>
+        <p class="card__address">${user.location.street.number},${user.location.street.name},</p>
+        <p class="card__address">${user.location.city},</p>
+        <p class="card__address">${user.location.state},</p>
+        <p class="card__address">${user.location.country},</p>
+        <p class="card__address">${user.location.postcode},</p>
+      </div>
+      `;
+    }).
+    join("");
+    console.log(html);
+    document.querySelector("main").insertAdjacentHTML("afterbegin", html);
+  }).
+  catch(error => {
+    console.log(error);
+  });
+}
+
+render();
+</script>
+
+</body></html>
